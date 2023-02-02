@@ -1,11 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+// import { useEffect, useState } from "react";
+// import Task from "./classes/Task";
+import Form from "./components/Form";
+import TaskList from "./components/TaskList";
+import { TasksProvider } from "./context/Tasks";
 
-function App() {
+const App = () => {
   return (
-    <div>
-    </div>
+    <TasksProvider>
+      <Form></Form>
+      <TaskList></TaskList>
+    </TasksProvider>
   );
-}
+};
 
 export default App;

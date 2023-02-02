@@ -1,0 +1,33 @@
+.card {
+  text-align: center;
+}
+
+.card label, .card textarea, .card input{
+  display: block;
+  margin: 0 auto;
+}
+
+.card textarea {
+  resize: none;
+  font-size: 1.1em;;
+  width: 40vmin;
+  height: 25vmin;;
+}
+
+.card label {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 2px;
+}
+
+.card input {
+  width: 40vmin;
+  height: 1.6em;
+  font-size: 1em;;
+}
+
+.card button {
+  margin: 5px;
+  padding: 3px;
+}
