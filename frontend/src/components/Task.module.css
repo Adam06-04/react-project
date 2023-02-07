@@ -1,16 +1,18 @@
 .card {
+  position: relative; 
   margin: 10px auto;
   padding: 6px;
   border-radius: 15px;
   width: 700px;
   max-width: 90vw;
   min-height: 150px;
-  background-color: black;
+  background-color: rgb(55, 32, 11);
   color: bisque;
 }
 
 .card h1 {
   font-size: 1.1em;
+  word-wrap: break-word;
   text-align: center;
   text-size-adjust: auto;
   padding-bottom: 4px;
@@ -20,4 +22,25 @@
   text-indent: 30px;
   text-align: justify;
   word-wrap: break-word;
+  padding-bottom: 70px;
+}
+
+button.delete {
+  top: 100%;
+  left: 100%;
+  transform: translate(-120%, -120%);
+  position: absolute;
+  margin: 0;
+  padding: 14px 8px;
+  background-color: rgb(167, 18, 18);
+}
+
+button.edit {
+  top: 100%;
+  left: 100%;
+  transform: translate(-230%, -120%);
+  position: absolute;
+  margin: 0;
+  padding: 14px 18px;
+  background-color: rgb(215, 208, 0);
 }

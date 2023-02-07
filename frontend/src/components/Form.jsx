@@ -1,41 +1,81 @@
-import { useState } from "react";
-import { useTasks } from "../context/Tasks";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { tasksActions, uiActions } from "../store";
+import Button from "../UI/Button";
 import classes from "./Form.module.css";
 
 const Form = () => {
-  const {dispatch} = useTasks();
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+  const dispatch = useDispatch();
+  const ui = useSelector((state) => state.ui);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
-    const onChangeTitle = (e) => {
-        setTitle(e.target.value);
-    }
-    
-    const onChangeDescription = (e) => {
-        setDescription(e.target.value);
-    }
+  const onChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
 
-    const newTask = (e) => {
-        e.preventDefault();
-        dispatch({type: "add", title: title, description: description});
-        setTitle('');
-        setDescription('');
-    }
+  const onChangeDescription = (e) => {
+    setDescription(e.target.value);
+  };
 
-    const onResetForm = () => {
-        setTitle('');
-        setDescription('');
+  const newTask = (e) => {
+    e.preventDefault();
+    dispatch(tasksActions.add({ title: title, description: description }));
+    setTitle("");
+    setDescription("");
+    dispatch(uiActions.toggle());
+  };
+
+  const editTask = (e) => {
+    e.preventDefault();
+    dispatch(
+      tasksActions.edit({
+        title: title,
+        description: description,
+        id: ui.idToEdit,
+      })
+    );
+    setTitle("");
+    setDescription("");
+    dispatch(uiActions.toggle());
+  };
+
+  const onResetForm = () => {
+    setTitle("");
+    setDescription("");
+  };
+
+  useEffect(() => {
+    if (ui.isEdition) {
+      setTitle(ui.titleToEdit);
+      setDescription(ui.descriptionToEdit);
+    } 
+    else {
+      setTitle("");
+      setDescription("");
     }
+  }, [ui.isEdition, ui.titleToEdit, ui.descriptionToEdit]);
 
   return (
     <div className={classes.card}>
-      <form onSubmit={newTask} onReset={onResetForm}>
+      <form onSubmit={ui.isEdition ? editTask : newTask} onReset={onResetForm}>
         <label htmlFor="title">Title</label>
-        <input type="text" name="title" maxLength="40" value={title} onChange={onChangeTitle}/>
+        <input
+          type="text"
+          id="title"
+          maxLength="40"
+          value={title}
+          onChange={onChangeTitle}
+        />
         <label htmlFor="description">Description</label>
-        <textarea name="description" maxLength="500" value={description} onChange={onChangeDescription}></textarea>
-        <button type="submit">Create New Task</button>
-        <button type="reset">Reset</button>
+        <textarea
+          id="description"
+          maxLength="500"
+          value={description}
+          onChange={onChangeDescription}
+        ></textarea>
+        <Button type="submit">{ui.isEdition ? "Edit Task" : "Add Task"}</Button>
+        <Button type="reset">Reset</Button>
       </form>
     </div>
   );

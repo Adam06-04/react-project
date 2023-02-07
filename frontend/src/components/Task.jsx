@@ -1,18 +1,29 @@
-import { useTasks } from "../context/Tasks";
+import { useDispatch } from "react-redux";
+import { tasksActions, uiActions } from "../store";
+import Button from "../UI/Button";
 import classes from "./Task.module.css";
-const Task = (props) => {
-  const { dispatch } = useTasks();
+
+const Task = ({title, description, index}) => {
+  const dispatch  = useDispatch()
+
+  const onEditTask = () => {
+    dispatch(uiActions.toEdit({title: title, description: description, id: index}))
+  }
+
   const onDeleteTask = () => {
-    dispatch({type: "remove", id: props.index})
+    dispatch(tasksActions.remove(index))
   };
 
   return (
     <div className={classes.card}>
-      <h1>{props.title}</h1>
-      <p>{props.description}</p>
-      <button type="button" onClick={onDeleteTask}>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      <Button className={classes.edit} onClick={onEditTask}>
+        Edit
+      </Button>
+      <Button className={classes.delete} onClick={onDeleteTask}>
         Delete
-      </button>
+      </Button>
     </div>
   );
 };

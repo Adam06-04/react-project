@@ -9,9 +9,9 @@
 
 .card textarea {
   resize: none;
-  font-size: 1.1em;;
-  width: 40vmin;
-  height: 25vmin;;
+  font-size: 1.1em;
+  width: 80%;
+  height: 25vh;
 }
 
 .card label {
@@ -22,12 +22,22 @@
 }
 
 .card input {
-  width: 40vmin;
+  width: 80%;
   height: 1.6em;
   font-size: 1em;;
 }
 
 .card button {
   margin: 5px;
-  padding: 3px;
+  padding: 6px;
+}
+
+.card button[type="reset"] {
+  background-color: red;
+}
+
+@media (max-width: 768px) {
+  .card textarea, .card input{
+    width: 95%;
+  }
 }

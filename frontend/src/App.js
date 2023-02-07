@@ -1,15 +1,28 @@
-// import { useEffect, useState } from "react";
-// import Task from "./classes/Task";
+import { useDispatch } from "react-redux";
 import Form from "./components/Form";
 import TaskList from "./components/TaskList";
-import { TasksProvider } from "./context/Tasks";
+import Header from "./layouts/Header";
+import { uiActions } from "./store";
+import Button from "./UI/Button";
+import Modal from "./UI/Modal";
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  const onToggle = () => {
+    dispatch(uiActions.toggle());
+  };
+
   return (
-    <TasksProvider>
-      <Form></Form>
-      <TaskList></TaskList>
-    </TasksProvider>
+    <>
+      <Header>
+        <Button onClick={onToggle}>Create New Task</Button>
+      </Header>
+      <Modal>
+        <Form />
+      </Modal>
+      <TaskList />
+    </>
   );
 };
 
