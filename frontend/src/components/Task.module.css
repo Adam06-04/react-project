@@ -20,7 +20,7 @@
 
 .card p {
   text-indent: 30px;
-  text-align: justify;
+  text-align:start;
   word-wrap: break-word;
   padding-bottom: 70px;
 }

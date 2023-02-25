@@ -1,6 +1,5 @@
 import classes from "./TaskList.module.css";
 import Task from "./Task";
-import { memo } from "react";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
@@ -29,6 +28,4 @@ const TaskList = () => {
   );
 };
 
-const MemoedTaskList = memo(TaskList);
-
-export default MemoedTaskList;
+export default TaskList;

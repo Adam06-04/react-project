@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { tasksActions, uiActions } from "../store";
 import Button from "../UI/Button";
@@ -7,22 +7,31 @@ import classes from "./Form.module.css";
 const Form = () => {
   const dispatch = useDispatch();
   const ui = useSelector((state) => state.ui);
+
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [desc, setDesc] = useState("");
 
-  const onChangeTitle = (e) => {
-    setTitle(e.target.value);
-  };
+  const enteredTitleRef = useRef("");
+  const enteredDescRef = useRef("");
 
-  const onChangeDescription = (e) => {
-    setDescription(e.target.value);
-  };
+  // const onChangeTitle = (e) => {
+  //   enteredTitleRef.current.value = e.target.value;
+  // };
+
+  // const onChangeDescription = (e) => {
+  //   enteredDescRef.current.value = e.target.value;
+  // };
 
   const newTask = (e) => {
     e.preventDefault();
-    dispatch(tasksActions.add({ title: title, description: description }));
-    setTitle("");
-    setDescription("");
+    dispatch(
+      tasksActions.add({
+        title: enteredTitleRef.current.value,
+        description: enteredDescRef.current.value,
+      })
+    );
+    enteredTitleRef.current.value = "";
+    enteredDescRef.current.value = "";
     dispatch(uiActions.toggle());
   };
 
@@ -30,49 +39,47 @@ const Form = () => {
     e.preventDefault();
     dispatch(
       tasksActions.edit({
-        title: title,
-        description: description,
+        title: enteredTitleRef.current.value,
+        description: enteredDescRef.current.value,
         id: ui.idToEdit,
       })
     );
-    setTitle("");
-    setDescription("");
+    enteredTitleRef.current.value = "";
+    enteredDescRef.current.value = "";
     dispatch(uiActions.toggle());
   };
 
   const onResetForm = () => {
-    setTitle("");
-    setDescription("");
+    enteredTitleRef.current.value = "";
+    enteredDescRef.current.value = "";
   };
 
   useEffect(() => {
     if (ui.isEdition) {
-      setTitle(ui.titleToEdit);
-      setDescription(ui.descriptionToEdit);
-    } 
-    else {
-      setTitle("");
-      setDescription("");
+      enteredTitleRef.current.value = ui.titleToEdit;
+      enteredDescRef.current.value = ui.descriptionToEdit;
+    } else {
+      enteredTitleRef.current.value = title;
+      enteredDescRef.current.value = desc;
     }
-  }, [ui.isEdition, ui.titleToEdit, ui.descriptionToEdit]);
+  }, [ui.isEdition, ui.titleToEdit, ui.descriptionToEdit, title, desc]);
+
+  useLayoutEffect(() => {
+    if (!ui.isEdition) return;
+    setTitle(enteredTitleRef.current.value);
+    setDesc(enteredDescRef.current.value);
+  }, [ui.isEdition]);
 
   return (
     <div className={classes.card}>
       <form onSubmit={ui.isEdition ? editTask : newTask} onReset={onResetForm}>
         <label htmlFor="title">Title</label>
-        <input
-          type="text"
-          id="title"
-          maxLength="40"
-          value={title}
-          onChange={onChangeTitle}
-        />
+        <input type="text" id="title" maxLength="40" ref={enteredTitleRef} />
         <label htmlFor="description">Description</label>
         <textarea
           id="description"
           maxLength="500"
-          value={description}
-          onChange={onChangeDescription}
+          ref={enteredDescRef}
         ></textarea>
         <Button type="submit">{ui.isEdition ? "Edit Task" : "Add Task"}</Button>
         <Button type="reset">Reset</Button>
